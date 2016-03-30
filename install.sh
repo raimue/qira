@@ -61,14 +61,23 @@ elif [[ "$unamestr" == 'Darwin' ]]; then
     cd tracers
     ./pin_build.sh
     cd ../
+  elif [ $(which port) ]; then
+    echo "Installing OS X dependencies"
+    sudo port sync
+    sudo port install py27-virtualenv capstone
+    cd tracers
+    ./pin_build.sh
+    cd ../
   else
-    echo "build script only supports Homebrew"
+    echo "build script only supports Homebrew or MacPorts"
   fi
 fi
 
 echo "installing pip packages"
 
-if [ $(which virtualenv2) ]; then
+if [ $(which virtualenv-2.7) ]; then
+    VIRTUALENV="virtualenv-2.7"
+elif [ $(which virtualenv2) ]; then
     VIRTUALENV="virtualenv2"
 else
     VIRTUALENV="virtualenv"
